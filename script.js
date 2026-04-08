@@ -197,44 +197,48 @@ class ProjectModal {
                 github: 'https://workdrive.zohopublic.in/external/f2775e4c464ce91edbcfae4f03137f81ef17f9e75a8dceb6d7f253110dec946a'
             },
             '2': {
-                title: 'ZIET',
+                title: 'ZAPI',
                 description: "A diet planner based off of food items that are available in zoho's meals, tailored to each employee's health, tastes and shift-timings.",
                 features: [
-                    'User customization on food preferences',
-                    'Sign up and user health related info input through Creator Form',
-                    "Ideal diet planning for user's health, taste and time of meals",
-                    'Regular notifications through cliq bot',
-                    'Website to view analytics and history and to update already given user details',
-                    'Backend made as Rest-API'
+                    "Built an API playground application that allows users to test and execute APIs.",
+                    "Integrated Zoho OneAuth to securely authenticate users and access Zoho APIs using token-based authentication",
+                    "Users can configure and send API requests by providing URL, method, headers, and parameters.",
+                    "The application captures and stores the API response in JSON format.",
+                    "Implemented a feature to extract specific fields from the API response and map them to variables",
+                    "Users can save the API request and response for future reference and reuse."
                 ],
-                technologies: ['Java', 'Javascript', 'Deluge', 'Zoho Creator', 'MySQL', 'My Database Util framework', 'Zoho APIs'],
-                github: 'https://workdrive.zohopublic.in/external/7c952aeca4a1c0b2b278e9092a3d11b48f90afe34f7fcb337ba9cc2c19510557',
-                live: 'https://workdrive.zohopublic.in/external/7c952aeca4a1c0b2b278e9092a3d11b48f90afe34f7fcb337ba9cc2c19510557'
+                technologies: ['Java', 'Javascript', 'MySQL', 'Zoho APIs', "Zoho OneAuth"],
+                github: 'https://github.com/SabariNandhakumar/ZAPI',
+                live: 'https://github.com/SabariNandhakumar/ZAPI'
             },
             '3': {
-                title: 'Snake Game',
-                description: 'Snake game in Swift (MacOS))',
+                title: 'To do List',
+                description: 'A sketch-inspired to-do list you can use in the browser: handwritten-style layout, checkboxes, priorities, and a simple workflow to add and finish tasks.',
                 features: [
-                    'Perfect game mechanics of a snake game',
-                    "Dynamic image updation to suit the angle of the snake's head, body, and tail",
+                    'Paper-style UI with clear rows for each task',
+                    'Check off items and strikethrough when done',
+                    'Priority levels and save / edit flow per task',
+                    'Search, add, and clear-all controls in the header',
+                    'Deployed as a static site on GitHub Pages'
                 ],
-                technologies: ['Swift', 'MacOS Cocoa Framework'],
-                github: 'https://workdrive.zohopublic.in/external/2dcc7b6cad9985f396b581ddd25b7442ddf0e3baa6ad9d2594f994de61c87687'
+                technologies: ['HTML', 'CSS', 'JavaScript'],
+                github: 'https://github.com/SabariNandhakumar/todo',
+                live: 'https://sabarinandhakumar.github.io/todo/'
             },
-            '4': {
-                title: 'Trigonometry Animation',
-                description: 'An animation video created using Manim (A python animations library) to help visualize trigonometric functions',
-                features: [
-                    'Visualization of sine and cosine functions',
-                    'Animated unit circle with angle tracing',
-                    'Dynamic linking between circle movement and graph output',
-                    'Step-by-step derivation of trigonometric identities',
-                    'Clear mathematical labeling and annotations'
-                ],
-                technologies: ['Python', 'Manim Library', 'Mathematics'],
-                github: 'https://workdrive.zohopublic.in/external/68210277d0691d75ca36cc304fdf92e20613ba0b9f65f234bc607a3337cd1663',
-                live: 'https://workdrive.zohopublic.in/external/231d2075667c71356e322fcafb600c05986f23af6ec56ea834a592287426da56'
-            }
+            // '4': {
+            //     title: 'Trigonometry Animation',
+            //     description: 'An animation video created using Manim (A python animations library) to help visualize trigonometric functions',
+            //     features: [
+            //         'Visualization of sine and cosine functions',
+            //         'Animated unit circle with angle tracing',
+            //         'Dynamic linking between circle movement and graph output',
+            //         'Step-by-step derivation of trigonometric identities',
+            //         'Clear mathematical labeling and annotations'
+            //     ],
+            //     technologies: ['Python', 'Manim Library', 'Mathematics'],
+            //     github: 'https://workdrive.zohopublic.in/external/68210277d0691d75ca36cc304fdf92e20613ba0b9f65f234bc607a3337cd1663',
+            //     live: 'https://workdrive.zohopublic.in/external/231d2075667c71356e322fcafb600c05986f23af6ec56ea834a592287426da56'
+            // }
         };
 
         const project = projects[projectId];
