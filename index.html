@@ -1,401 +1,325 @@
-// Theme Management
-class ThemeManager {
-    constructor() {
-        this.theme = localStorage.getItem('theme') || 'light';
-        this.themeToggle = document.getElementById('theme-toggle');
-        this.init();
-    }
-
-    init() {
-        this.setTheme(this.theme);
-        this.themeToggle.addEventListener('click', () => this.toggleTheme());
-    }
-
-    setTheme(theme) {
-        this.theme = theme;
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-        
-        const icon = this.themeToggle.querySelector('i');
-        icon.className = theme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-    }
-
-    toggleTheme() {
-        this.setTheme(this.theme === 'light' ? 'dark' : 'light');
-    }
-}
-
-// Navigation Management
-class Navigation {
-    constructor() {
-        this.navbar = document.getElementById('navbar');
-        this.navToggle = document.getElementById('nav-toggle');
-        this.navMenu = document.getElementById('nav-menu');
-        this.navLinks = document.querySelectorAll('.nav-link');
-        this.init();
-    }
-
-    init() {
-        // Handle mobile menu toggle
-        this.navToggle.addEventListener('click', () => this.toggleMobileMenu());
-        
-        // Handle smooth scrolling
-        this.navLinks.forEach(link => {
-            link.addEventListener('click', (e) => this.handleNavClick(e));
-        });
-
-        // Handle scroll effects
-        // window.addEventListener('scroll', () => this.handleScroll());
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', (e) => this.closeMobileMenuOnOutsideClick(e));
-    }
-
-    toggleMobileMenu() {
-        this.navMenu.classList.toggle('active');
-        this.navToggle.classList.toggle('active');
-    }
-
-    handleNavClick(e) {
-        e.preventDefault();
-        const href = e.target.getAttribute('href');
-        
-        if (href.startsWith('#')) {
-            const target = document.querySelector(href);
-            if (target) {
-                const offsetTop = target.offsetTop - 70;
-                window.scrollTo({
-                    top: offsetTop,
-                    behavior: 'smooth'
-                });
-            }
-        }
-
-        // Close mobile menu after clicking
-        this.navMenu.classList.remove('active');
-        this.navToggle.classList.remove('active');
-    }
-
-    handleScroll() {
-        const scrolled = window.scrollY > 50;
-        this.navbar.style.background = scrolled 
-            ? 'rgba(255, 255, 255, 0.95)' 
-            : 'rgba(255, 255, 255, 0.95)';
-
-        // Update active nav link based on scroll position
-        this.updateActiveNavLink();
-    }
-
-    updateActiveNavLink() {
-        const sections = document.querySelectorAll('section[id]');
-        const scrollPos = window.scrollY + 100;
-
-        sections.forEach(section => {
-            const top = section.offsetTop;
-            const height = section.offsetHeight;
-            const id = section.getAttribute('id');
-            const navLink = document.querySelector(`.nav-link[href="#${id}"]`);
-
-            if (scrollPos >= top && scrollPos < top + height) {
-                document.querySelectorAll('.nav-link').forEach(link => {
-                    link.classList.remove('active');
-                });
-                if (navLink) navLink.classList.add('active');
-            }
-        });
-    }
-
-    closeMobileMenuOnOutsideClick(e) {
-        if (!this.navbar.contains(e.target)) {
-            this.navMenu.classList.remove('active');
-            this.navToggle.classList.remove('active');
-        }
-    }
-}
-
-// Skills Animation
-class SkillsAnimation {
-    constructor() {
-        this.skillBars = document.querySelectorAll('.skill-progress');
-        this.init();
-    }
-
-    init() {
-        this.observeSkills();
-    }
-
-    observeSkills() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    this.animateSkillBar(entry.target);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        this.skillBars.forEach(bar => observer.observe(bar));
-    }
-
-    animateSkillBar(bar) {
-        const progress = bar.getAttribute('data-progress');
-        setTimeout(() => {
-            bar.style.width = progress + '%';
-        }, 300);
-    }
-}
-
-// Projects Modal
-class ProjectModal {
-    constructor() {
-        this.modal = document.getElementById('project-modal');
-        this.modalBody = document.getElementById('modal-body');
-        this.modalClose = document.getElementById('modal-close');
-        this.modalOverlay = document.getElementById('modal-overlay');
-        this.projectCards = document.querySelectorAll('.project-card');
-        this.init();
-    }
-
-    init() {
-        this.projectCards.forEach(card => {
-            card.addEventListener('click', () => this.openModal(card));
-        });
-
-        this.modalClose.addEventListener('click', () => this.closeModal());
-        this.modalOverlay.addEventListener('click', () => this.closeModal());
-        
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') this.closeModal();
-        });
-    }
-
-    openModal(card) {
-        const projectId = card.getAttribute('data-project');
-        const content = this.getProjectContent(projectId);
-        this.modalBody.innerHTML = content;
-        this.modal.classList.add('active');
-        document.body.style.overflow = 'hidden';
-    }
-
-    closeModal() {
-        this.modal.classList.remove('active');
-        document.body.style.overflow = 'auto';
-    }
-
-    getProjectContent(projectId) {
-        const projects = {
-            '1': {
-                title: 'DB Visualiser',
-                description: 'A Java database visualiser: connect with JDBC, browse catalogs and schemas, see tables and columns at a glance, and understand how entities link through keys—plus ad‑hoc SQL with readable result views.',
-                features: [
-                    'JDBC connections to supported engines (e.g. MySQL, PostgreSQL, SQLite) with saved connection settings',
-                    'Tree or panel-style navigation of databases, schemas, tables, and column metadata',
-                    'Highlights primary and foreign keys so relationships between tables are easy to follow',
-                    'SQL editor to run statements and browse result sets in a structured table view',
-                    'Straightforward interactive interface for exploration and light administration tasks'
-                ],
-                technologies: ['Java', 'JDBC', 'SQL', 'DBMS']
-            },
-            '2': {
-                title: 'ZAPI',
-                description: "API playground with Zoho OneAuth for secure Zoho API access.Supports configurable requests, JSON response handling, dynamic field mapping, and saving workflows.",
-                features: [
-                    "Built an API playground application that allows users to test and execute APIs.",
-                    "Integrated Zoho OneAuth to securely authenticate users and access Zoho APIs using token-based authentication",
-                    "Users can configure and send API requests by providing URL, method, headers, and parameters.",
-                    "The application captures and stores the API response in JSON format.",
-                    "Implemented a feature to extract specific fields from the API response and map them to variables",
-                    "Users can save the API request and response for future reference and reuse."
-                ],
-                technologies: ['Java', 'Javascript', 'MySQL', 'Zoho APIs', "Zoho OneAuth"]
-            },
-            '3': {
-                title: 'To do List',
-                description: 'A sketch-inspired to-do list you can use in the browser: handwritten-style layout, checkboxes, priorities, and a simple workflow to add and finish tasks.',
-                features: [
-                    'Paper-style UI with clear rows for each task',
-                    'Check off items and strikethrough when done',
-                    'Priority levels and save / edit flow per task',
-                    'Search, add, and clear-all controls in the header',
-                    'Deployed as a static site on GitHub Pages'
-                ],
-                technologies: ['HTML', 'CSS', 'JavaScript'],
-                github: 'https://github.com/SabariNandhakumar/todo',
-                live: 'https://sabarinandhakumar.github.io/todo/'
-            },
-            // '4': {
-            //     title: 'Trigonometry Animation',
-            //     description: 'An animation video created using Manim (A python animations library) to help visualize trigonometric functions',
-            //     features: [
-            //         'Visualization of sine and cosine functions',
-            //         'Animated unit circle with angle tracing',
-            //         'Dynamic linking between circle movement and graph output',
-            //         'Step-by-step derivation of trigonometric identities',
-            //         'Clear mathematical labeling and annotations'
-            //     ],
-            //     technologies: ['Python', 'Manim Library', 'Mathematics'],
-            //     github: 'https://workdrive.zohopublic.in/external/68210277d0691d75ca36cc304fdf92e20613ba0b9f65f234bc607a3337cd1663',
-            //     live: 'https://workdrive.zohopublic.in/external/231d2075667c71356e322fcafb600c05986f23af6ec56ea834a592287426da56'
-            // }
-        };
-
-        const project = projects[projectId];
-        if (!project) return '<p>Project not found.</p>';
-        return `
-            <h2 style="margin-bottom: 16px; color: var(--text-primary);">${project.title}</h2>
-            <p style="margin-bottom: 24px; color: var(--text-secondary); font-size: 18px;">${project.description}</p>
-            
-            <h3 style="margin-bottom: 12px; color: var(--text-primary);">Key Features:</h3>
-            <ul style="margin-bottom: 24px; color: var(--text-secondary);">
-                ${project.features.map(feature => `<li style="margin-bottom: 8px;">${feature}</li>`).join('')}
-            </ul>
-            
-            <h3 style="margin-bottom: 12px; color: var(--text-primary);">Technologies Used:</h3>
-            <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
-                ${project.technologies.map(tech => `
-                    <span style="background-color: var(--gray-100); color: var(--gray-900); padding: 4px 12px; border-radius: 20px; font-size: 14px; font-weight: 500;">
-                        ${tech}
-                    </span>
-                `).join('')}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sabari - Backend Developer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="logo-text"></span>
             </div>
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="nav-toggle" id="nav-toggle">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+            <button class="theme-toggle" id="theme-toggle">
+                <i class="fas fa-sun"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="greeting">Hello, I'm</span>
+                    <span class="name">Sabari N</span>
+                    <span class="role">BackEnd Developer</span>
+                </h1>
+                <p class="hero-description">
+                    I’m a backend developer and a dedicated student with a passion for understanding how systems work at their core, from low-level memory layouts, efficient data handling and computer architecture to backend software design.
+                </p>
+                <div class="hero-buttons">
+                    <a href="#contact" class="btn btn-primary">Get In Touch</a>
+                    <a href="#projects" class="btn btn-secondary">View My Work</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="sabari-photo-2.png" alt="Sabari N" class="hero-photo" width="400" height="400" decoding="async">
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-arrow">
+                <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">About Me</h2>
+                <!-- <p class="section-subtitle">Get to know me better</p> -->
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>I'm a backend developer and self-taught learner exploring systems deeply</h3>
+                    <p>
+                        I focus on building strong foundations in computer architecture, low-level systems, 
+                        and backend development. My interests range from designing efficient data structures 
+                        to understanding how memory and computation work at the hardware level.
+                    </p>
+                    <p>
+                        When I’m not coding or animating, I explore new ways to gamify learning and design 
+                        projects that combine creativity with technical depth. For me, learning is a 
+                        continuous process, and I’m always working on the next challenge.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Skills & Technologies</h2>
+                <p class="section-subtitle">Tools and technologies I can work with</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Backend</h3>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Java</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">C</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="70"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">MySQL & PostgreSQL</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="75"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Frontend</h3>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Javascript</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="50"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-name">Zoho Catalyst</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="50"></div>
+                            </div>
+                        </div>
+                        <!-- <div class="skill-item">
+                            <span class="skill-name">Swift</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="60"></div>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3>Tools</h3>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <span class="skill-name">Git</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="90"></div>
+                            </div>
+                        </div>
+                        <!-- <div class="skill-item">
+                            <span class="skill-name">Google Skia(C++)</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="80"></div>
+                            </div>
+                        </div> -->
+                        <div class="skill-item">
+                            <span class="skill-name">Mickey Framework</span>
+                            <div class="skill-bar">
+                                <div class="skill-progress" data-progress="70"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Featured Projects</h2>
+                <p class="section-subtitle">Some of my recent work</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card" data-project="1">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-network-wired" aria-hidden="true"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <button type="button" class="btn btn-primary btn-sm project-btn">View Details</button>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">DB Visualiser</h3>
+                        <p class="project-description">
+                            A Java app to connect to databases over JDBC, explore schemas visually, inspect tables and relationships, and run queries with results laid out clearly.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">JDBC</span>
+                            <span class="tech-tag">SQL</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="project-card" data-project="2">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fa-solid fa-diagram-project" aria-hidden="true"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <button class="btn btn-primary btn-sm project-btn">View Details</button>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">ZAPI</h3>
+                        <p class="project-description">
+                            An API playground with Zoho OneAuth where APIs can be chained, mapping one API’s response to another’s request for automated workflows.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Java</span>
+                            <span class="tech-tag">Javascript</span>
+                            <span class="tech-tag">Zoho OneAuth</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card" data-project="3">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <div class="project-overlay">
+                            <button class="btn btn-primary btn-sm project-btn">View Details</button>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">To do List</h3>
+                        <p class="project-description">
+                            A paper-style task list in the browser: add items, set priority, mark complete, and clear the list—built with HTML, CSS, and JavaScript.
+                        </p>
+                        <div class="project-tech">
+                            <span class="tech-tag">HTML</span>
+                            <span class="tech-tag">CSS</span>
+                            <span class="tech-tag">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">Let's work together!</p>
+            </div>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <p>
+                        I'm always eager to contribute wherever the team needs support! If there’s a project or area where I can add value, I’m ready to step in!
+                    </p>
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <i class="fas fa-envelope"></i>
+                            <span>sabari.n@zohocorp.com</span>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-phone"></i>
+                            <span>+91 9952781829</span>
+                        </div>
+                        <div class="contact-method">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Guduvanchery, Chengalpet</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- <form class="contact-form" id="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" required>
+                        <label for="name">Your Name</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" required>
+                        <label for="email">Your Email</label>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" required>
+                        <label for="subject">Subject</label>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" required></textarea>
+                        <label for="message">Your Message</label>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">Send Message</button>
+                </form> -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
             
-            ${(project.github && project.github.trim() !== '') || (project.live && project.live.trim() !== '')
-                ? `<div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                ${project.github && project.github.trim() !== ''
-                    ? `<a href="${project.github}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
-                    <i class="fab fa-git-alt" style="font-size: 1.5rem; margin-right: 8px; margin-bottom : 2px;"></i>View Code
-                </a>`
-                    : ''}
-                ${project.live && project.live.trim() !== ''
-                    ? `<a href="${project.live}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
-                           <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>Sample
-                       </a>`
-                    : ''}
-            </div>`
-                : ''}
-        `;
+        </div>
+    </footer>
 
-    }
-}
+    <!-- Project Modal -->
+    <div class="modal" id="project-modal">
+        <div class="modal-overlay" id="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-body" id="modal-body">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
 
-// Contact Form
-class ContactForm {
-    constructor() {
-        this.form = document.getElementById('contact-form');
-        this.init();
-    }
-
-    init() {
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-    }
-
-    handleSubmit(e) {
-        e.preventDefault();
-        
-        const formData = new FormData(this.form);
-        const data = {
-            name: formData.get('name'),
-            email: formData.get('email'),
-            subject: formData.get('subject'),
-            message: formData.get('message')
-        };
-
-        // Simulate form submission
-        this.showNotification('Thank you! Your message has been sent successfully.', 'success');
-        this.form.reset();
-    }
-
-    showNotification(message, type) {
-        // Create notification element
-        const notification = document.createElement('div');
-        notification.className = `notification notification-${type}`;
-        notification.style.cssText = `
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: ${type === 'success' ? 'var(--success-color)' : 'var(--error-color)'};
-            color: white;
-            padding: 16px 24px;
-            border-radius: 8px;
-            box-shadow: var(--shadow-lg);
-            z-index: 3000;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.3s ease;
-        `;
-        notification.textContent = message;
-
-        document.body.appendChild(notification);
-
-        // Show notification
-        setTimeout(() => {
-            notification.style.opacity = '1';
-            notification.style.transform = 'translateX(0)';
-        }, 100);
-
-        // Hide notification
-        setTimeout(() => {
-            notification.style.opacity = '0';
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                document.body.removeChild(notification);
-            }, 300);
-        }, 5000);
-    }
-}
-
-// Scroll Animations
-class ScrollAnimations {
-    constructor() {
-        this.elements = document.querySelectorAll('section');
-        this.init();
-    }
-
-    init() {
-        this.observeElements();
-    }
-
-    observeElements() {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('fade-in-up');
-                }
-            });
-        }, { 
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        });
-
-        this.elements.forEach(element => observer.observe(element));
-    }
-}
-
-// Initialize all components when DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new ThemeManager();
-    new Navigation();
-    new SkillsAnimation();
-    new ProjectModal();
-    new ContactForm();
-    new ScrollAnimations();
-});
-
-// Handle window resize
-let resizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        // Close mobile menu on resize to desktop
-        if (window.innerWidth > 768) {
-            document.getElementById('nav-menu').classList.remove('active');
-            document.getElementById('nav-toggle').classList.remove('active');
-        }
-    }, 250);
-});
-
-// Smooth scroll for scroll indicator
-document.querySelector('.scroll-indicator').addEventListener('click', () => {
-    document.getElementById('about').scrollIntoView({
-        behavior: 'smooth'
-    });
-});
+    <script src="script.js"></script>
+</body>
+</html>
