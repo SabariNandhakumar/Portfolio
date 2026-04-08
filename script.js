@@ -197,7 +197,7 @@ class ProjectModal {
             },
             '2': {
                 title: 'ZAPI',
-                description: "A diet planner based off of food items that are available in zoho's meals, tailored to each employee's health, tastes and shift-timings.",
+                description: 'A Java database visualiser: connect with JDBC, browse catalogs and schemas, see tables and columns at a glance, and understand how entities link through keys—plus ad‑hoc SQL with readable result views.',
                 features: [
                     "Built an API playground application that allows users to test and execute APIs.",
                     "Integrated Zoho OneAuth to securely authenticate users and access Zoho APIs using token-based authentication",
