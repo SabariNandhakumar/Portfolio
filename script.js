@@ -197,7 +197,7 @@ class ProjectModal {
             },
             '2': {
                 title: 'ZAPI',
-                description: 'A Java database visualiser: connect with JDBC, browse catalogs and schemas, see tables and columns at a glance, and understand how entities link through keys—plus ad‑hoc SQL with readable result views.',
+                description: "API playground with Zoho OneAuth for secure Zoho API access.Supports configurable requests, JSON response handling, dynamic field mapping, and saving workflows.",
                 features: [
                     "Built an API playground application that allows users to test and execute APIs.",
                     "Integrated Zoho OneAuth to securely authenticate users and access Zoho APIs using token-based authentication",
