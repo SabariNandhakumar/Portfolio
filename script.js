@@ -206,9 +206,7 @@ class ProjectModal {
                     "Implemented a feature to extract specific fields from the API response and map them to variables",
                     "Users can save the API request and response for future reference and reuse."
                 ],
-                technologies: ['Java', 'Javascript', 'MySQL', 'Zoho APIs', "Zoho OneAuth"],
-                github: 'https://github.com/SabariNandhakumar/ZAPI',
-                live: 'https://github.com/SabariNandhakumar/ZAPI'
+                technologies: ['Java', 'Javascript', 'MySQL', 'Zoho APIs', "Zoho OneAuth"]
             },
             '3': {
                 title: 'To do List',
