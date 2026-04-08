@@ -184,17 +184,16 @@ class ProjectModal {
     getProjectContent(projectId) {
         const projects = {
             '1': {
-                title: 'Database Utility Tool',
-                description: 'A lightweight and versatile database utility framework for simplifying data access and management.',
+                title: 'DB Visualiser',
+                description: 'A Java database visualiser: connect with JDBC, browse catalogs and schemas, see tables and columns at a glance, and understand how entities link through keys—plus ad‑hoc SQL with readable result views.',
                 features: [
-                    'Database connectivity using JDBC',
-                    'Support for multiple database engines (MySQL, PostgreSQL, SQLite)',
-                    'Query execution and return of easily accessible result',
-                    'User-friendly interface for CRUD operations',
-                    'Connection pooling for optimized performance'
-                ],                
-                technologies: ['Java (Used Generics & Reflection)', 'JDBC', 'DBMS'],
-                github: 'https://workdrive.zohopublic.in/external/f2775e4c464ce91edbcfae4f03137f81ef17f9e75a8dceb6d7f253110dec946a'
+                    'JDBC connections to supported engines (e.g. MySQL, PostgreSQL, SQLite) with saved connection settings',
+                    'Tree or panel-style navigation of databases, schemas, tables, and column metadata',
+                    'Highlights primary and foreign keys so relationships between tables are easy to follow',
+                    'SQL editor to run statements and browse result sets in a structured table view',
+                    'Straightforward interactive interface for exploration and light administration tasks'
+                ],
+                technologies: ['Java', 'JDBC', 'SQL', 'DBMS']
             },
             '2': {
                 title: 'ZAPI',
@@ -261,17 +260,20 @@ class ProjectModal {
                 `).join('')}
             </div>
             
-            <div style="display: flex; gap: 16px; flex-wrap: wrap;">
-                <a href="${project.github}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
+            ${(project.github && project.github.trim() !== '') || (project.live && project.live.trim() !== '')
+                ? `<div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                ${project.github && project.github.trim() !== ''
+                    ? `<a href="${project.github}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
                     <i class="fab fa-git-alt" style="font-size: 1.5rem; margin-right: 8px; margin-bottom : 2px;"></i>View Code
-                </a>
-                ${project.live && project.live.trim() !== '' 
+                </a>`
+                    : ''}
+                ${project.live && project.live.trim() !== ''
                     ? `<a href="${project.live}" target="_blank" class="btn btn-secondary" style="text-decoration: none;">
                            <i class="fas fa-external-link-alt" style="margin-right: 8px;"></i>Sample
-                       </a>` 
-                    : ''
-                }
-            </div>
+                       </a>`
+                    : ''}
+            </div>`
+                : ''}
         `;
 
     }
